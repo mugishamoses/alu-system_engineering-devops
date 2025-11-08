@@ -10,5 +10,5 @@ apt-get install nginx -y
 # Create index page with required content
 echo "Holberton School" > /var/www/html/index.html
 
-# Start Nginx service
-service nginx start
+# Ensure Nginx is running
+service nginx restart
