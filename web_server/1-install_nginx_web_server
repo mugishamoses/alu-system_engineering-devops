@@ -7,8 +7,28 @@ apt-get update -y
 # Install Nginx
 apt-get install nginx -y
 
+# Stop Nginx to modify configuration
+service nginx stop
+
 # Create index page with required content
 echo "Holberton School" > /var/www/html/index.html
 
-# Ensure Nginx is running
-service nginx restart
+# Configure Nginx to listen on port 80
+cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    root /var/www/html;
+    index index.html;
+    
+    server_name _;
+    
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF
+
+# Start Nginx
+service nginx start
