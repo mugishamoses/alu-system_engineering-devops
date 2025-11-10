@@ -1,0 +1,67 @@
+═══════════════════════════════════════════════════════════════
+TASK 3: "LET ME IN!" - COPY & PASTE COMMANDS
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Connect to your server
+───────────────────────────────────────────────────────────────
+ssh ubuntu@184.72.213.154
+
+
+STEP 2: Once connected, copy and paste these commands ONE BY ONE
+───────────────────────────────────────────────────────────────
+
+# Create .ssh directory
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+
+# Add intranet's public key (COPY THIS ENTIRE LINE)
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOSAuRGLjJ6DW4PqX4wId/Kawz35ESampIqHSOTJmbQ8UlxdJuk0gAXKk3Ncle4safGYqM/VeDK3LN5iAJxf4kcaxNtS3eVxWBE5iF3FbIjOqwxw5Lf5sRa5yXxA8HfWidhbIG5TqKL922hPgsCGABIrXRlfZYeC0FEuPWdr6smOElSVvIXthRWp9cr685KdCI+COxlj1RdVsvIo+zunmLACF9PYdjB2s96Fn0ocD3c5SGLvDOFCyvDojSAOyE70ebIElnskKsDTGwfT4P6jh9OBzTyQEIS2jOaE5RQq4IB4DsMhvbjDSQrP0MdCLgwkN" >> ~/.ssh/authorized_keys
+
+# Set correct permissions
+chmod 600 ~/.ssh/authorized_keys
+
+# Verify (should show the key)
+cat ~/.ssh/authorized_keys
+
+
+STEP 3: Verify permissions
+───────────────────────────────────────────────────────────────
+ls -la ~/.ssh/
+
+Expected output:
+drwx------ 2 ubuntu ubuntu 4096 ... .ssh
+-rw------- 1 ubuntu ubuntu  XXX ... authorized_keys
+
+
+STEP 4: Verify key was added
+───────────────────────────────────────────────────────────────
+grep "AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOSAuRGLjJ6DW4PqX4wId" ~/.ssh/authorized_keys
+
+If you see the key printed, SUCCESS! ✓
+
+
+STEP 5: Request new review on intranet
+───────────────────────────────────────────────────────────────
+Go to the intranet and click "Request a new review" for Task 3.
+The checker will now be able to connect to your server.
+
+
+═══════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+If checker still fails, run these diagnostic commands:
+
+# Check SSH service status
+sudo systemctl status ssh
+
+# Check SSH is listening
+sudo ss -tlnp | grep :22
+
+# Check SSH logs for connection attempts
+sudo tail -20 /var/log/auth.log
+
+# Fix permissions if needed
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+═══════════════════════════════════════════════════════════════
