@@ -14,15 +14,15 @@ cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
 # Configure HAProxy with frontend and backend
 cat >> /etc/haproxy/haproxy.cfg <<EOF
 
-frontend kamipacifique-frontend
+frontend mugishamoses-frontend
     bind *:80
     mode http
-    default_backend kamipacifique-backend
+    default_backend mugishamoses-backend
 
-backend kamipacifique-backend
+backend mugishamoses-backend
     balance roundrobin
-    server 6877-web-01 54.85.69.88:80 check
-    server 6877-web-02 3.95.28.85:80 check
+    server 6890-web-01 18.205.24.44:80 check
+    server 6890-web-02 54.147.32.243:80 check
 EOF
 
 # Restart HAProxy service
