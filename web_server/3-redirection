@@ -1,29 +1,35 @@
 #!/usr/bin/env bash
-#Configure your Nginx server so that /redirect_me is redirecting to another page
+# Configure your Nginx server so that /redirect_me is redirecting to another page
+
+# Update and install Nginx
 sudo apt-get update -y
 sudo apt-get install -y nginx
 
-sudo mkdir /etc/nginx/html
-sudo touch /etc/nginx/html/index.html
+# Create index.html with required content
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-#sudo ufw allow 'Nginx HTTP'
+# Configure Nginx with proper redirection
 config=\
 "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+	listen 80 default_server;
+	listen [::]:80 default_server;
 	root /var/www/html;
 	index index.html index.htm index.nginx-debian.html;
 	server_name _;
 	location / {
 		try_files \$uri \$uri/ =404;
-        }
+	}
 	location /redirect_me {
 		return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
 	}
 }
 "
-sudo chown -R "$USER":"$USER" /var/www/html/index.html
-sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/default
-echo "Holberton School" > /var/www/html/index.html
-echo "$config" > /etc/nginx/sites-available/default
+
+# Write configuration to default site
+echo "$config" | sudo tee /etc/nginx/sites-available/default
+
+# Test Nginx configuration
+sudo nginx -t
+
+# Restart Nginx to apply changes
 sudo service nginx restart
