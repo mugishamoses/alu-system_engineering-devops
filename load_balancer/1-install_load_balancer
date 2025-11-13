@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Install and configure HAProxy on lb-01 server to load balance between web-01 and web-02
+
+# Update system and install HAProxy
+apt-get -y update
+apt-get -y install haproxy
+
+# Enable HAProxy to be started by init script
+sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+
+# Backup the original haproxy.cfg
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+
+# Configure HAProxy with frontend and backend
+cat >> /etc/haproxy/haproxy.cfg <<EOF
+
+frontend kamipacifique-frontend
+    bind *:80
+    mode http
+    default_backend kamipacifique-backend
+
+backend kamipacifique-backend
+    balance roundrobin
+    server 6877-web-01 54.85.69.88:80 check
+    server 6877-web-02 3.95.28.85:80 check
+EOF
+
+# Restart HAProxy service
+service haproxy restart
